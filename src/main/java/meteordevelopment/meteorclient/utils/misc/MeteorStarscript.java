@@ -78,11 +78,13 @@ public class MeteorStarscript {
         StandardLib.init(ss);
 
         // General
-        ss.set("mc_version", SharedConstants.getGameVersion().getName());
-        ss.set("fps", () -> Value.number(MinecraftClientAccessor.getFps()));
-        ss.set("ping", MeteorStarscript::ping);
-        ss.set("time", () -> Value.string(LocalTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))));
-        ss.set("cps", () -> Value.number(CPSUtils.getCpsAverage()));
+        ss.set("minecraft", new ValueMap()
+            .set("version", SharedConstants.getGameVersion().getName())
+            .set("fps", () -> Value.number(MinecraftClientAccessor.getFps()))
+            .set("ping", MeteorStarscript::ping)
+            .set("time", () -> Value.string(LocalTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))))
+            .set("cps", () -> Value.number(CPSUtils.getCpsAverage()))
+        );
 
         // Meteor
         ss.set("meteor", new ValueMap()
@@ -140,6 +142,7 @@ public class MeteorStarscript {
                 .set("x", () -> Value.number(mc.player != null ? Utils.getPlayerSpeed().x : 0))
                 .set("y", () -> Value.number(mc.player != null ? Utils.getPlayerSpeed().y : 0))
                 .set("z", () -> Value.number(mc.player != null ? Utils.getPlayerSpeed().z : 0))
+                .set("total", () -> Value.number(mc.player != null ? Utils.getPlayerSpeed().length() : 0))
             )
 
             .set("breaking_progress", () -> Value.number(mc.interactionManager != null ? ((ClientPlayerInteractionManagerAccessor) mc.interactionManager).getBreakingProgress() : 0))

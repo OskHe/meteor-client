@@ -38,6 +38,14 @@ public class InventoryHud extends HudElement {
         .build()
     );
 
+    private final Setting<Boolean> alwaysShowEnderchest = sgGeneral.add(new BoolSetting.Builder()
+        .name("show-enderchest")
+        .description("Shows the contents of the Enderchest regardless of what item is being held.")
+        .defaultValue(false)
+        .visible(containers::get)
+        .build()
+    );
+
     // Scale
 
     public final Setting<Boolean> customScale = sgScale.add(new BoolSetting.Builder()
@@ -144,6 +152,8 @@ public class InventoryHud extends HudElement {
 
     private ItemStack getContainer() {
         if (isInEditor() || mc.player == null) return null;
+
+        if (alwaysShowEnderchest.get()) return Items.ENDER_CHEST.getDefaultInstance();
 
         ItemStack stack = mc.player.getOffhandItem();
         if (Utils.hasItems(stack) || stack.getItem() == Items.ENDER_CHEST) return stack;
